@@ -1,0 +1,13 @@
+{
+    "arduino.path": "C:/Program Files (x86)/Arduino",
+    "arduino.commandPath": "arduino_debug.exe",
+    "arduino.logLevel": "info",
+    "arduino.enableUSBDetection": true,
+    "arduino.disableTestingOpen": false,
+    "arduino.skipHeaderProvider": false,
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "arduino.additionalUrls": [
+        "https://dl.espressif.com/dl/package_esp32_index.json",
+    ],
+    "arduino.defaultBaudRate": 115200,
+}

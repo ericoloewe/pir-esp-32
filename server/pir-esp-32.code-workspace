@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "D:\\Codigos\\repositorios\\pir-esp-32\\app"
+		},
+		{
+			"path": "D:\\Codigos\\repositorios\\pir-esp-32\\pir"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"array": "cpp",
+			"deque": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"vector": "cpp",
+			"initializer_list": "cpp"
+		}
+	}
+}
