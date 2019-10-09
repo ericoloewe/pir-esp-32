@@ -6,8 +6,8 @@
 #define EAP_IDENTITY "0118340@feevale.br"
 #define EAP_PASSWORD "160996"
 
-const uint16_t port = 8080;
-const char * host = "10.40.18.145";
+const uint16_t port = 9999;
+const char * host = "10.47.18.131";
 // const char* ssid = "eduroam"; // Eduroam SSID
 const char* ssid     = "DESKTOP-LPD8U10 5875";
 const char* password = "deboas123";
@@ -37,9 +37,12 @@ void loop() {
     return;
   }
 
+  int sensorValue = digitalRead(motionSensorPort);
+
   Serial.print("VALOR ATUAL: ");
   Serial.print(digitalRead(motionSensorPort));
   Serial.print("\n");
+  client.print(sensorValue);
   delay(1000);
 }
 
@@ -62,7 +65,7 @@ void connect()//Sub-rotina para verificar a conexao com o host.
 {
   WiFi.mode(WIFI_STA);//Define o ESP32 como Station.
   Serial.print("Connecting to network: ");
-  
+
   if (WiFi.status() != WL_CONNECTED)//Caso nao esteja conectado ao host, ira se conectar.
   {
     WiFi.begin(ssid, password);//Conecta à rede do host.
