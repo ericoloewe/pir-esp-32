@@ -55,7 +55,7 @@ namespace server
                     if (context.WebSockets.IsWebSocketRequest)
                     {
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                        
+
                         await Echo(context, webSocket);
                     }
                     else
@@ -81,10 +81,10 @@ namespace server
 
             while (!result.CloseStatus.HasValue)
             {
-                await webSocket.SendAsync(Encoding.UTF8.GetBytes(pirStatus), result.MessageType, result.EndOfMessage, CancellationToken.None);
                 Console.WriteLine("Sending ws");
+                await webSocket.SendAsync(Encoding.UTF8.GetBytes(pirStatus), result.MessageType, result.EndOfMessage, CancellationToken.None);
 
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                Thread.Sleep(1000);
             }
 
             Console.WriteLine("Closed ws");

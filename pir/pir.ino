@@ -7,7 +7,7 @@
 #define EAP_PASSWORD "160996"
 
 const uint16_t port = 9999;
-const char * host = "10.47.18.131";
+const char * host = "192.168.137.1";
 // const char* ssid = "eduroam"; // Eduroam SSID
 const char* ssid     = "DESKTOP-LPD8U10 5875";
 const char* password = "deboas123";
@@ -19,6 +19,7 @@ WiFiClient client;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+  pinMode(motionSensorPort, INPUT_PULLUP);
 
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -26,24 +27,11 @@ void setup() {
 
   connect();
   establishContact();
-  attachInterrupt(digitalPinToInterrupt(motionSensorPort), detectsMovement, RISING);
+  attachInterrupt(digitalPinToInterrupt(motionSensorPort), detectsMovement, CHANGE);
 }
 
 void loop() {
-  if (!client.connect(host, port)) {
-    Serial.println("Connection to host failed");
-
-    delay(1000);
-    return;
-  }
-
-  int sensorValue = digitalRead(motionSensorPort);
-
-  Serial.print("VALOR ATUAL: ");
-  Serial.print(digitalRead(motionSensorPort));
-  Serial.print("\n");
-  client.print(sensorValue);
-  delay(1000);
+  // sendInfo();
 }
 
 void establishContact() {
@@ -59,6 +47,7 @@ void establishContact() {
 
 void detectsMovement() {
   Serial.println("Movimento detectado!!!");
+  sendInfo();
 }
 
 void connect()//Sub-rotina para verificar a conexao com o host.
@@ -75,6 +64,24 @@ void connect()//Sub-rotina para verificar a conexao com o host.
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
   }
+}
+
+void sendInfo() {
+  if (!client.connect(host, port)) {
+    Serial.println("Connection to host failed");
+
+    delay(1000);
+    return;
+  }
+
+  int sensorValue = digitalRead(motionSensorPort);
+
+  Serial.print("VALOR ATUAL: ");
+  Serial.print(digitalRead(motionSensorPort));
+  Serial.print("\n");
+  Serial.println("Sending sensor value to IP");
+  client.print(sensorValue);
+  delay(1000);
 }
 
 void connectToWiFiWithEduroam(const char * ssid)
