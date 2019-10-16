@@ -7,6 +7,7 @@ const char* password = "deboas123";
 int counter = 0;
 
 int motionSensorPort = 27;
+int lastSensorValue = 0;
 WiFiClient client;
 
 void setup() {
@@ -24,13 +25,14 @@ void setup() {
 }
 
 void loop() {
-  sendInfo();
+  sendInfoIfNeed();
+  delay(1000);
 }
 
-void detectsMovement() {
-  Serial.println("Movimento detectado!!!");
-  sendInfo();
-}
+// void detectsMovement() {
+//   Serial.println("Movimento detectado!!!");
+//   sendInfoIfNeed();
+// }
 
 void establishContact() {
   int count = 0;
@@ -59,22 +61,24 @@ void connect()//Sub-rotina para verificar a conexao com o host.
   }
 }
 
-void sendInfo() {
+void sendInfoIfNeed() {
   int sensorValue = digitalRead(motionSensorPort);
-  
+
   Serial.print("Valor atual: ");
   Serial.println(sensorValue);
 
-  Serial.println(WiFi.localIP());
+  if (lastSensorValue != sensorValue) {  
+    lastSensorValue = sensorValue;
+  
+    if (!client.connect(host, port)) {
+      Serial.println("Connection to host failed");
+  
+      delay(1000);
+      return;
+    }
 
-  if (!client.connect(host, port)) {
-    Serial.println("Connection to host failed");
-
-    delay(1000);
-    return;
+    Serial.print("Sending sensor value to IP ");
+    Serial.println(WiFi.localIP());
+    client.print(sensorValue);
   }
-
-  Serial.println("Sending sensor value to IP");
-  client.print(sensorValue);
-  delay(1000);
 }
