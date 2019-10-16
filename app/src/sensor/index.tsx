@@ -17,20 +17,21 @@ export class PirSensor extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    socket = new WebSocket(url);
+    this.loadSocket();
+    this.requestPermitionIfNeed();
+  }
 
+  private loadSocket() {
+    socket = new WebSocket(url);
     socket.onopen = () => {
       this.setState(() => ({ wsStatus: "opened" }));
       socket.send("Receive sensor status");
     };
-
     socket.onclose = () => this.setState(() => ({ wsStatus: "closed" }));
-
     socket.onerror = e => {
       this.setState(() => ({ wsStatus: "error" }));
       console.error("Stack: ", e);
     };
-
     socket.onmessage = this.handleMessage;
   }
 
@@ -38,9 +39,23 @@ export class PirSensor extends React.Component<Props, State> {
     this.setState(() => ({ wsStatus: "message", sensorStatus: data }));
 
     if (data === "MD") {
-      alert("Movimento detectado!");
+      if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        new Notification("Movimento detectado!");
+      } else {
+        alert("Movimento detectado!");
+      }
     }
   };
+
+  private requestPermitionIfNeed() {
+    if (Notification.permission !== "denied") {
+      Notification.requestPermission(permission => {
+        // If the user accepts, let's create a notification
+        console.log("User permission: ", permission);
+      });
+    }
+  }
 
   render() {
     const { sensorStatus, wsStatus } = this.state;
