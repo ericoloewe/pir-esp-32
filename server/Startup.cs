@@ -82,9 +82,17 @@ namespace server
             while (!result.CloseStatus.HasValue)
             {
                 Console.WriteLine("Sending ws");
-                await webSocket.SendAsync(Encoding.UTF8.GetBytes(pirStatus), result.MessageType, result.EndOfMessage, CancellationToken.None);
 
-                Thread.Sleep(1000);
+                if (pirStatus == "1")
+                {
+                    await webSocket.SendAsync(Encoding.UTF8.GetBytes("MD"), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                }
+                else
+                {
+                    await webSocket.SendAsync(Encoding.UTF8.GetBytes("NMD"), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                }
+
+                Thread.Sleep(5000);
             }
 
             Console.WriteLine("Closed ws");
@@ -120,7 +128,7 @@ namespace server
                     Console.WriteLine("Echoed test = {0}", pirStatus);
                     handler.Shutdown(SocketShutdown.Both);
                     handler.Close();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
                 }
             }
             catch (Exception e)

@@ -31,9 +31,16 @@ export class PirSensor extends React.Component<Props, State> {
       console.error("Stack: ", e);
     };
 
-    socket.onmessage = ({ data }) =>
-      this.setState(() => ({ wsStatus: "message", sensorStatus: data }));
+    socket.onmessage = this.handleMessage;
   }
+
+  private handleMessage = ({ data }: MessageEvent) => {
+    this.setState(() => ({ wsStatus: "message", sensorStatus: data }));
+
+    if (data === "MD") {
+      alert("Movimento detectado!");
+    }
+  };
 
   render() {
     const { sensorStatus, wsStatus } = this.state;
